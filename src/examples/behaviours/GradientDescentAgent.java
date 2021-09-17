@@ -1,3 +1,5 @@
+package examples.behaviours;
+
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 
@@ -72,7 +74,11 @@ public class GradientDescentAgent extends Agent {
 
 	private class GDOneShotBehaviour extends OneShotBehaviour {
 
-		public void action() {}
+		public void action() {
+			GradientDescent gd = new GradientDescent(0.1, 30);
+
+			gd.calculate();
+		}
 
 		public int onEnd() {
 			myAgent.doDelete();

@@ -60,13 +60,16 @@ public class GradientDescentAgent extends Agent {
 			double solution = leftBound + (Math.random() *
 				(rightBound - leftBound));
 
+			System.out.println("------------------------------");
+			System.out.printf("%-8s | %-8s | %s\n", "n_iter", "x value", "f(x)");
+			System.out.println("------------------------------");
 			for (int i = 0; i < this.nIter; i++) {
 				var gradient = derivative(solution);
 				// update solution value
 				solution = solution - (gradient * this.stepSize);
+				var result = objective(solution);
 				// show the new solution
-				System.out.printf(">%d f(%.5f) = %.5f\n", i, solution,
-					objective(solution));
+				System.out.printf("%-8d | %-8.5f | %.5f\n", i, solution, result);
 			}
 		}
 

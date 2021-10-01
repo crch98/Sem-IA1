@@ -3,8 +3,6 @@ package examples.behaviours;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 
-//import ia_algorithms.LinearRegression;
-
 public class SLRAgent extends Agent {
 
 	protected void setup() {

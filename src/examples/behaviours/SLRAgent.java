@@ -5,8 +5,26 @@ import jade.core.behaviours.OneShotBehaviour;
 
 public class SLRAgent extends Agent {
 
+	private double predictValue;
+
 	protected void setup() {
 		System.out.println("Agent " + getLocalName() + " started.");
+
+		Object[] args = getArguments();
+		if (args != null && args.length > 0) {
+			var aux = (String) args[0];
+			try {
+				predictValue = Double.parseDouble(aux);
+			} catch (NumberFormatException e) {
+				System.err.println("Error: " + e);
+				doDelete();
+				System.exit(0);
+			}
+		} else {
+			doDelete();
+			System.exit(0);
+		}
+
 		addBehaviour(new SLRBehaviour());
 	}
 
@@ -63,7 +81,7 @@ public class SLRAgent extends Agent {
 		public void action() {
 			LinearRegression ln = new LinearRegression();
 			double learning_rate = 0.0001;
-			int num_epoch = 30000;
+			int num_epoch = 30525;
 
 			ln.train(dataset, learning_rate, num_epoch);
 
@@ -71,8 +89,8 @@ public class SLRAgent extends Agent {
 			System.out.println("y_p = " + ln.getBeta_0() + " + " +
 				ln.getBeta_1() + " * X");
 
-			System.out.println("Predicted value of " + 80 + ": " +
-				ln.predict(80));
+			System.out.println("Predicted value of " + predictValue + ": " +
+				ln.predict(predictValue));
 		}
 
 		public int onEnd() {

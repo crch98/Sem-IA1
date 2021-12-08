@@ -33,6 +33,9 @@ public class SLRAgent extends Agent {
 		private double beta_0;
 		private double beta_1;
 
+		private static final int X_POSITION = 0;
+		private static final int Y_POSITION = 1;
+
 		public LinearRegression() {
 			beta_0 = 0.0;
 			beta_1 = 0.0;
@@ -42,16 +45,32 @@ public class SLRAgent extends Agent {
 			return (beta_1 * x) + beta_0;
 		}
 
+		private double error(double y_i, double y_p) {
+			return y_i - y_p;
+		}
+
+		private double partialDerivB1(double x, double y, int n) {
+			var e = error(y, predict(x));
+
+			return ((double) (-2) / n) * x * e;
+		}
+
+		private double partialDerivB0(double x, double y, int n) {
+			var e = error(y, predict(x));
+	
+			return ((double) (-2) / n) * e;
+		} 
+
 		private void gradient_descent(double[][] dataset, double alpha, int epoch) {
-			int X_POSITION = 0;
-			int Y_POSITION = 1;
+			int N = dataset.length;
 
 			for (int i = 0; i < epoch; i++) {
 				for (int j = 0; j < dataset.length; j++) {
-					var y_p = predict(dataset[j][X_POSITION]);
-					var error = y_p - dataset[j][Y_POSITION];
-					beta_0 = beta_0 - (error * alpha);
-					beta_1 = beta_1 - (error * alpha * dataset[j][X_POSITION]);
+					var x_i = dataset[j][X_POSITION];
+					var y_i = dataset[j][Y_POSITION];
+
+					beta_0 -= (alpha * partialDerivB0(x_i, y_i, N));
+					beta_1 -= (alpha * partialDerivB1(x_i, y_i, N));
 				}
 			}
 		}
@@ -80,8 +99,8 @@ public class SLRAgent extends Agent {
 
 		public void action() {
 			LinearRegression ln = new LinearRegression();
-			double learning_rate = 0.0001;
-			int num_epoch = 30525;
+			double learning_rate = 0.001;
+			int num_epoch = 13100;
 
 			ln.train(dataset, learning_rate, num_epoch);
 
